@@ -4,6 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://6q2f57csbiy5" path="res://asset/sprites/world_tileset.png" id="2_yqjtg"]
 [ext_resource type="PackedScene" uid="uid://b41c5qw7r1aof" path="res://scenes/platform.tscn" id="3_lnu2h"]
 [ext_resource type="PackedScene" uid="uid://0yve8ebv6cmw" path="res://scenes/coin.tscn" id="4_lbhrr"]
+[ext_resource type="PackedScene" uid="uid://b87qwc4uievt5" path="res://scenes/killzone.tscn" id="5_iywne"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_lnu2h"]
 texture = ExtResource("2_yqjtg")
@@ -172,19 +173,7 @@ physics_layer_1/collision_mask = 7
 sources/0 = SubResource("TileSetAtlasSource_lnu2h")
 
 [sub_resource type="Animation" id="Animation_iywne"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath(".:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(227, -35)]
-}
+length = 2.0333333
 
 [sub_resource type="Animation" id="Animation_p57ef"]
 resource_name = "up"
@@ -271,6 +260,8 @@ _data = {
 &"move": SubResource("Animation_lbhrr")
 }
 
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_p57ef"]
+
 [node name="game" type="Node2D" unique_id=169403780]
 position = Vector2(2, -16)
 
@@ -280,7 +271,8 @@ position = Vector2(8, 8)
 [node name="Camera2D" type="Camera2D" parent="player" unique_id=274713927]
 position = Vector2(28, -5)
 zoom = Vector2(4, 4)
-limit_enabled = false
+limit_bottom = 60
+limit_smoothed = true
 position_smoothing_enabled = true
 
 [node name="TileMap" type="TileMap" parent="." unique_id=2067459317]
@@ -289,7 +281,7 @@ format = 2
 layer_0/tile_data = PackedInt32Array(65536, 0, 0, 65537, 0, 0, 65538, 0, 0, 65539, 0, 0, 65540, 0, 0, 65541, 0, 0, 65542, 0, 0, 65543, 0, 0, 65544, 0, 0, 65545, 0, 0, 65546, 0, 0, 65547, 0, 0, 65548, 0, 0, 65549, 0, 0, 65550, 0, 0, 131071, 0, 0, 131070, 0, 0, 131069, 0, 0, 131068, 0, 0, -131064, 0, 0, -131063, 0, 0, -131062, 0, 0, -131061, 0, 0, -65539, 0, 0, -65538, 0, 0, -65537, 0, 0, -131072, 0, 0, -262141, 0, 0, -262140, 0, 0, -262139, 0, 0, 65551, 0, 0, 15, 0, 0, -65521, 0, 0, -65520, 589824, 0, -65519, 655360, 0, -65518, 720896, 0, -327675, 0, 5, -393211, 0, 4, -458747, 0, 3, -65510, 0, 0, 26, 0, 0, 65562, 0, 0, 65563, 0, 0, 131099, 0, 0, 131100, 0, 0, 131101, 0, 0, 65565, 0, 0, 29, 0, 0, 30, 0, 0, -65507, 0, 0, -65508, 0, 0, -65509, 0, 0, 27, 0, 0, 65564, 0, 0, 28, 0, 0, -65506, 0, 0, 65566, 0, 0, 131102, 0, 0, 131098, 0, 0, -131042, 524288, 3)
 
 [node name="platformup" parent="." unique_id=241133389 instance=ExtResource("3_lnu2h")]
-position = Vector2(227, -35)
+position = Vector2(226.37912, -92.742424)
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="platformup" unique_id=1915451555]
 libraries/ = SubResource("AnimationLibrary_u5sy4")
@@ -302,8 +294,18 @@ position = Vector2(348, 0)
 libraries/ = SubResource("AnimationLibrary_iywne")
 autoplay = &"move"
 
-[node name="coin" parent="." unique_id=217421905 instance=ExtResource("4_lbhrr")]
-position = Vector2(472, -21)
+[node name="killzone" parent="." unique_id=1291424280 instance=ExtResource("5_iywne")]
+position = Vector2(113, 76)
 
-[node name="coin2" parent="." unique_id=1581154353 instance=ExtResource("4_lbhrr")]
-position = Vector2(281, -52)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="killzone" unique_id=317926057]
+shape = SubResource("WorldBoundaryShape2D_p57ef")
+
+[node name="coins" type="Node" parent="." unique_id=1432665556]
+
+[node name="coin" parent="coins" unique_id=217421905 instance=ExtResource("4_lbhrr")]
+position = Vector2(474, -37)
+
+[node name="coin2" parent="coins" unique_id=1581154353 instance=ExtResource("4_lbhrr")]
+position = Vector2(283, -68)
+
+[node name="platforms" type="Node" parent="." unique_id=1375439145]
